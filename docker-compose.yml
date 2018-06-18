@@ -1,0 +1,54 @@
+version: '3.4'
+
+networks:
+  swarm_network:
+    driver: overlay
+    attachable: true
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
+
+services:
+  master:
+    image: grubykarol/locust
+    environment:
+      - ATTACKED_HOST=${ATTACKED_HOST}
+      - LOCUST_MODE=master
+    volumes:
+      - type: bind
+        source: ./locust
+        target: /locust
+    networks:
+      swarm_network:
+        aliases:
+          - locust-master
+    ports:
+      - published: 8089
+        target: 8089
+        protocol: tcp
+      - published: 5557
+        target: 5557
+        protocol: tcp
+      - published: 5558
+        target: 5558
+        protocol: tcp
+
+  slave:
+    image: grubykarol/locust
+
+    deploy:
+      mode: replicated
+      replicas: ${NUM_OF_SLAVE}
+
+    environment:
+      - ATTACKED_HOST=${ATTACKED_HOST}
+      - LOCUST_MODE=slave
+      - LOCUST_MASTER=locust-master
+
+    volumes:
+      - type: bind
+        source: ./locust
+        target: /locust
+    networks:
+      swarm_network:
+
