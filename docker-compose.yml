@@ -10,7 +10,7 @@ networks:
 
 services:
   master:
-    image: grubykarol/locust
+    image: grubykarol/locust:0.8.1-py3.6
     environment:
       - ATTACKED_HOST=${ATTACKED_HOST}
       - LOCUST_MODE=master
@@ -34,7 +34,7 @@ services:
         protocol: tcp
 
   slave:
-    image: grubykarol/locust
+    image: grubykarol/locust:0.8.1-py3.6
 
     deploy:
       mode: replicated
@@ -51,4 +51,3 @@ services:
         target: /locust
     networks:
       swarm_network:
-

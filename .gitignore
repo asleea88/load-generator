@@ -1,2 +1,3 @@
 set-env.sh
 **/*.swp
+**/__pycache__/*

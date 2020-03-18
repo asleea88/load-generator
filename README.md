@@ -54,12 +54,17 @@ $ source set-env.sh
 $ docker swarm init
 ```
 
-4. Run(or Update) swarm cluster
+4. Remove swarm network before running, if there is
+```
+$ docker network rm `docker network ls --quiet --filter name=locust_swarm_network`
+```
+
+5. Run(or Update) swarm cluster
 ```
 $ docker stack deploy -c docker-compose.yml locust
 ```
 
-5. Check tasks
+6. Check tasks
 ```
 $ docker stack ps locust
 ```
@@ -79,4 +84,3 @@ $ docker service logs locust_master
 # For locust slave service
 $ docker service logs locust_slave
 ```
-
